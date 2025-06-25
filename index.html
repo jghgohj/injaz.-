@@ -76,8 +76,8 @@
         button {
             background-color: #4f46e5; /* لون أزرق بنفسجي */
             color: white; /* لون النص أبيض */
-            padding: 12px 28px; /* مسافة داخلية */
-            border-radius: 10px; /* حواف مستديرة */
+            padding: 12px 28px;
+            border-radius: 10px;
             cursor: pointer; /* مؤشر اليد */
             transition: background-color 0.3s ease, transform 0.2s ease; /* انتقال سلس */
             font-weight: 600; /* وزن الخط سميك */
@@ -121,10 +121,10 @@
             box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
         }
         .btn-update-name {
-            background-color: #10b981; /* لون أخضر زمردي لزر تحديث الاسم */
+            background-color: #10b981; /* Emerald 500 */
         }
         .btn-update-name:hover {
-            background-color: #059669; /* أخضر زمردي أغمق عند التمرير */
+            background-color: #059669; /* Emerald 600 */
         }
 
         /* أنماط بطاقات المحتوى (للمواد والمدرسين والفصول) */
@@ -316,7 +316,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background-color: #a7bffc; /* لون أزرق بنفسجي خفيف */
+            background-color: #a7bffc; /* Indigo 300 */
         }
         .maintenance-page h2 {
             font-size: 3rem;
@@ -524,7 +524,7 @@
                         <input type="text" id="teacher-name" placeholder="أدخل اسم المدرس" required class="shadow-sm">
                     </div>
                     <div>
-                        <label for="subject-name" class="block text-gray-700 text-base font-bold mb-2">اسم المادة الدراسية:</label>
+                        <label for="teacher-name" class="block text-gray-700 text-base font-bold mb-2">اسم المادة الدراسية:</label>
                         <input type="text" id="subject-name" placeholder="أدخل اسم المادة" required class="shadow-sm">
                     </div>
                     <div>
@@ -793,23 +793,24 @@
         // --- إدارة التخزين المحلي (LocalStorage) ---
 
         /**
-         * تقوم بتهيئة حساب المسؤول إذا لم يكن موجوداً أو إذا كانت حالته غير نشطة أو اسمه غير مضبوط.
+         * تقوم بتهيئة حساب المسؤول بشكل إجباري في كل مرة يتم فيها تحميل الصفحة.
+         * هذا يضمن أن بيانات المسؤول الصحيحة موجودة دائماً، ويُستخدم كحل لمشاكل تسجيل الدخول المستمرة.
          */
         async function initializeAdminAccount() {
             let existingUsers = getUsersFromStorage();
-            // التحقق مما إذا كان بريد المسؤول غير موجود أو حالته غير  active  أو اسمه غير مضبوط
-            if (!existingUsers[ADMIN_EMAIL] || existingUsers[ADMIN_EMAIL].status !==  active  || !existingUsers[ADMIN_EMAIL].name) { 
-                const hashedPassword = await hashPassword(ADMIN_PASSWORD);
-                existingUsers[ADMIN_EMAIL] = { 
-                    passwordHash: hashedPassword, 
-                    role:  admin , 
-                    status:  active , 
-                    lastActivatedDate: new Date().toISOString(), // تعيين تاريخ التفعيل الأولي
-                    name: existingUsers[ADMIN_EMAIL]?.name ||  المسؤول الرئيسي  // الحفاظ على الاسم الحالي إذا كان موجوداً، وإلا تعيين اسم افتراضي
-                };
-                saveUsersToStorage(existingUsers);
-                console.log( Admin account created/updated to active and named. );
-            }
+            const hashedPassword = await hashPassword(ADMIN_PASSWORD); // دائماً يتم تشفير كلمة مرور المسؤول
+
+            // دائماً يتم التأكد من إعداد حساب المسؤول بشكل صحيح، مع الكتابة فوق أي بيانات موجودة إذا لزم الأمر.
+            // هذا إجراء مؤقت للمساعدة في تصحيح أخطاء تسجيل دخول المسؤول المستمرة.
+            existingUsers[ADMIN_EMAIL] = { 
+                passwordHash: hashedPassword, 
+                role:  admin , 
+                status:  active , 
+                lastActivatedDate: new Date().toISOString(), // تعيين تاريخ التفعيل الأولي
+                name:  المسؤول الرئيسي  // دائماً تعيين الاسم الافتراضي عند التهيئة القسرية
+            };
+            saveUsersToStorage(existingUsers);
+            console.log( Admin account forcibly ensured to be active and correctly set. );
         }
 
         /**
