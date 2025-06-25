@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة إنجـــــاز التعليمية</title>
+    <!-- Tailwind CSS CDN (للتصميم السريع والجاهز) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* الرسوم المتحركة العامة للخلفية وعنوان المنصة */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes headerSlide {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-5px); }
+        }
+
+        /* أنماط الجسم الأساسية */
+        body {
+            font-family:  Inter , sans-serif; /* استخدام خط Inter */
+            direction: rtl; /* الاتجاه من اليمين إلى اليسار للعربية */
+            text-align: right; /* محاذاة النص لليمين */
+            min-height: 100vh; /* ارتفاع كامل الشاشة */
+            display: flex;
+            flex-direction: column;
+            
+            /* تدرج خلفية ديناميكي مع حركة */
+            background: linear-gradient(270deg, #e0e7ff, #c3dafe, #a7bffc); /* تدرج ألوان هادئة */
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s ease infinite; /* تطبيق الرسوم المتحركة */
+            color: #333; /* لون النص الأساسي */
+        }
+
+        /* تخطيط المحتوى الرئيسي وصفحة تسجيل الدخول والصيانة */
+        .main-content, .login-page, .maintenance-page {
+            flex: 1; /* السماح للعنصر بالنمو لدفع التذييل للأسفل */
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 20px; /* مسافة داخلية متجاوبة */
+            box-sizing: border-box; /* تضمين الحشوة في العرض والارتفاع */
+        }
+
+        .platform-container {
+            max-width: 1000px; /* أقصى عرض للحاوية */
+            margin: 20px auto; /* توسيط الحاوية أفقياً */
+            padding: 25px; /* مسافة داخلية */
+            background-color: #fff; /* خلفية بيضاء */
+            border-radius: 16px; /* حواف مستديرة */
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08); /* ظل خفيف */
+            flex-grow: 1; /* السماح له بملء المساحة الرأسية المتاحة */
+        }
+
+        /* أنماط حقول الإدخال ومناطق النص والاختيار */
+        input, textarea, select {
+            border: 1px solid #d1d5db; /* حدود رمادية فاتحة */
+            border-radius: 10px; /* حواف مستديرة */
+            padding: 14px; /* مسافة داخلية */
+            width: 100%; /* عرض كامل */
+            margin-bottom: 15px; /* مسافة سفلية */
+            font-size: 1rem; /* حجم الخط */
+            transition: all 0.2s ease-in-out; /* انتقال سلس عند التفاعل */
+            text-align: right; /* محاذاة النص لليمين */
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none; /* إزالة التركيز الافتراضي */
+            border-color: #6366f1; /* لون حدود عند التركيز */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* ظل عند التركيز */
+        }
+
+        /* أنماط الأزرار */
+        button {
+            background-color: #4f46e5; /* لون أزرق بنفسجي */
+            color: white; /* لون النص أبيض */
+            padding: 12px 28px; /* مسافة داخلية */
+            border-radius: 10px; /* حواف مستديرة */
+            cursor: pointer; /* مؤشر اليد */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* انتقال سلس */
+            font-weight: 600; /* وزن الخط سميك */
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); /* ظل */
+        }
+        button:hover {
+            background-color: #4338ca; /* لون أغمق عند التمرير */
+            transform: translateY(-2px); /* رفع الزر قليلاً */
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3); /* ظل أكبر عند التمرير */
+        }
+        .btn-secondary {
+            background-color: #6b7280; /* لون رمادي ثانوي */
+            box-shadow: 0 4px 10px rgba(107, 114, 128, 0.2);
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563; /* رمادي أغمق عند التمرير */
+            box-shadow: 0 6px 15px rgba(107, 114, 128, 0.3);
+        }
+        .delete-btn {
+            background-color: #ef4444; /* لون أحمر للحذف */
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.2);
+        }
+        .delete-btn:hover {
+            background-color: #dc2626; /* أحمر أغمق عند التمرير */
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+        .edit-btn {
+            background-color: #22c55e; /* لون أخضر للتعديل */
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(34, 197, 94, 0.2);
+        }
+        .edit-btn:hover {
+            background-color: #16a34a; /* أخضر أغمق عند التمرير */
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
+        }
+        .btn-update-name {
+            background-color: #10b981; /* لون أخضر زمردي لزر تحديث الاسم */
+        }
+        .btn-update-name:hover {
+            background-color: #059669; /* أخضر زمردي أغمق عند التمرير */
+        }
+
+        /* أنماط بطاقات المحتوى (للمواد والمدرسين والفصول) */
+        .content-card {
+            background-color: #f9fafb; /* خلفية فاتحة */
+            border: 1px solid #e5e7eb; /* حدود رمادية */
+            border-radius: 12px; /* حواف مستديرة */
+            padding: 20px; /* مسافة داخلية */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer; /* مؤشر اليد */
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; /* انتقال سلس */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04); /* ظل خفيف */
+            min-height: 120px; /* ارتفاع أدنى لضمان تناسق البطاقات */
+        }
+        .content-card:hover {
+            transform: translateY(-5px); /* رفع البطاقة قليلاً عند التمرير */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* ظل أكبر */
+            background-color: #eef2ff; /* خلفية أفتح عند التمرير */
+        }
+        .content-card h3 {
+            font-size: 1.5rem; /* حجم خط أكبر للعناوين */
+            font-weight: 700; /* خط سميك جداً */
+            color: #312e81; /* لون أزرق بنفسجي داكن */
+            margin-bottom: 5px;
+        }
+        .content-card p {
+            font-size: 0.9rem; /* حجم خط أصغر للوصف */
+            color: #6b7280; /* لون رمادي للنص */
+        }
+
+        /* أنماط خاصة ببطاقة المحاضرة */
+        .lecture-card {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+        .lecture-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #312e81;
+            margin-bottom: 5px;
+        }
+        .lecture-card a {
+            color: #1d4ed8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .lecture-card a:hover {
+            color: #1e3a8a;
+            text-decoration: underline;
+        }
+        .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        .teacher-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a7bffc;
+        }
+
+        /* مربع إشارة الاكتمال */
+        .completion-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #4f46e5;
+            cursor: pointer;
+            user-select: none; /* منع تحديد النص */
+        }
+        .completion-checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 0;
+            cursor: pointer;
+            accent-color: #4f46e5; /* تغيير لون مربع الاختيار */
+        }
+        .completion-checkbox-container input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .completion-checkbox-container span {
+            line-height: 1; /* محاذاة النص مع مربع الاختيار */
+        }
+        /* أنماط عناوين الفصول */
+        .chapter-heading-main {
+            background-color: #eef2ff; /* لون أزرق بنفسجي فاتح */
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        .chapter-heading-main h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3730a3; /* أزرق بنفسجي أغمق */
+        }
+
+        /* أنماط خاصة بصفحة تسجيل الدخول */
+        .login-page {
+            justify-content: center;
+            align-items: center;
+        }
+        .login-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .login-card h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #312e81;
+            margin-bottom: 20px;
+        }
+        .login-card p.welcome-message {
+            font-size: 1.15rem;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .login-card label {
+            text-align: right;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+        .role-selection {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .role-selection label {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            color: #4b5563;
+            flex: 1;
+        }
+        .role-selection input[type="radio"]:checked + label {
+            background-color: #e0e7ff;
+            border-color: #6366f1;
+            color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        .role-selection input[type="radio"] {
+            display: none;
+        }
+        .login-card .button-group {
+            display: flex;
+            gap: 15px;
+        }
+        .login-card .button-group button {
+            flex: 1;
+            padding: 14px;
+            font-size: 1.1rem;
+        }
+
+        /* أنماط صفحة الصيانة */
+        .maintenance-page {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #a7bffc; /* لون أزرق بنفسجي خفيف */
+        }
+        .maintenance-page h2 {
+            font-size: 3rem;
+            color: #312e81;
+            margin-bottom: 20px;
+        }
+        .maintenance-page p {
+            font-size: 1.5rem;
+            color: #4338ca;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* أنماط النوافذ المنبثقة (Modals) وصندوق الرسائل */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* خلفية شبه شفافة */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* لضمان ظهورها فوق كل شيء */
+            opacity: 0; /* إخفاء مبدئي */
+            visibility: hidden; /* إخفاء مبدئي */
+            transition: opacity 0.3s ease, visibility 0.3s ease; /* انتقال سلس للظهور والاختفاء */
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(-20px); /* حركة دخول خفيفة */
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0); /* إعادة الوضع الطبيعي عند الظهور */
+        }
+        .modal-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #312e81;
+            margin-bottom: 20px;
+        }
+        .modal-content input, .modal-content select {
+            text-align: right;
+        }
+        .modal-content .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .modal-content .button-group button {
+            flex-grow: 1;
+        }
+        .modal-message {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 25px;
+        }
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4f46e5;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            opacity: 0;
+            transform: translateX(100%); /* إخفاء مبدئي لليمين */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .message-box.active {
+            opacity: 1;
+            transform: translateX(0); /* الظهور من اليمين */
+        }
+
+        /* أنماط التذييل (Footer) */
+        .footer {
+            margin-top: auto; /* يدفع التذييل للأسفل */
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+            background-color: #f0f2f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- واجهة صفحة تسجيل الدخول -->
+    <div id="login-view" class="login-page">
+        <div class="login-card">
+            <h2 class="text-indigo-800">مرحباً بك في <br/> منصة إنجـــــاز التعليمية!</h2>
+            <p class="welcome-message">
+                منصتك الشاملة لطلاب السادس العلمي. 
+                سجّل الدخول للوصول إلى المحاضرات، رفع مواد جديدة، والمزيد.
+            </p>
+            <form id="login-register-form">
+                <div class="mb-5">
+                    <label for="auth-email-input" class="block text-right">البريد الإلكتروني:</label>
+                    <input type="email" id="auth-email-input" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                <div class="mb-5">
+                    <label for="auth-password-input" class="block text-right">كلمة المرور:</label>
+                    <input type="password" id="auth-password-input" placeholder="أدخل كلمة المرور" required>
+                </div>
+
+                <div id="role-selection-container" class="hidden">
+                    <p class="text-gray-700 text-base font-bold mb-2">اختر دورك:</p>
+                    <div class="role-selection">
+                        <input type="radio" id="role-admin" name="user-role" value="admin">
+                        <label for="role-admin">مسؤول</label>
+
+                        <input type="radio" id="role-student" name="user-role" value="student" checked>
+                        <label for="role-student">طالب</label>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" id="login-button">تسجيل الدخول</button>
+                    <button type="button" id="register-button" class="btn-secondary">تسجيل جديد</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- واجهة صفحة الصيانة (تظهر للطلاب عند تفعيل وضع الصيانة) -->
+    <div id="maintenance-view" class="maintenance-page hidden">
+        <h2 class="text-indigo-800">وضع الصيانة</h2>
+        <p class="text-indigo-700">المنصة قيد الصيانة والتحديث حالياً. يرجى المحاولة لاحقاً.</p>
+        <p class="mt-4 text-indigo-600">شكراً لتفهمكم.</p>
+    </div>
+
+    <!-- الواجهة الرئيسية للمنصة (بعد تسجيل الدخول) -->
+    <div id="platform-view" class="hidden main-content">
+        <div class="platform-container">
+            <h1 class="text-4xl font-extrabold text-center mb-10 text-indigo-800" style="animation: headerSlide 3s ease-in-out infinite alternate;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-block align-middle ml-2">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM17 12H13V17H11V12H7V10H11V7H13V10H17V12Z" fill="#4f46e5"/>
+                </svg>
+                منصة إنجـــــاز التعليمية
+            </h1>
+
+            <!-- شريط حالة المستخدم وإجراءاته -->
+            <div class="mb-8 p-4 bg-indigo-50 rounded-xl flex flex-col sm:flex-row justify-between items-center shadow-sm">
+                <div id="auth-status" class="text-indigo-700 font-semibold mb-4 sm:mb-0 text-xl"></div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="toggle-role-button" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 hidden">
+                        التبديل إلى عرض <span id="current-display-role">الطالب</span>
+                    </button>
+                    <button id="settings-button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 hidden">
+                        الإعدادات
+                    </button>
+                    <button id="logout-button" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 ease-in-out transform hover:scale-105">
+                        تسجيل الخروج
+                    </button>
+                </div>
+            </div>
+
+            <!-- نموذج إضافة/تعديل المحاضرات (يظهر للمسؤول فقط) -->
+            <div id="lecture-form-section" class="mb-10 p-6 bg-gray-50 rounded-xl shadow-md hidden">
+                <h2 id="form-title" class="text-3xl font-bold mb-6 text-indigo-700 text-center">إضافة محاضرة جديدة</h2>
+                <form id="add-edit-lecture-form" class="space-y-4">
+                    <input type="hidden" id="lecture-id">
+                    <div>
+                        <label for="lecture-title" class="block text-gray-700 text-base font-bold mb-2">عنوان المحاضرة:</label>
+                        <input type="text" id="lecture-title" placeholder="أدخل عنوان المحاضرة" required class="shadow-sm">
+                    </div>
+                    <div>
+                        <label for="chapter-name" class="block text-gray-700 text-base font-bold mb-2">اسم الفصل:</label>
+                        <input type="text" id="chapter-name" placeholder="أدخل اسم الفصل (مثال: الفصل الأول - أساسيات)" required class="shadow-sm">
+                    </div>
+                    <div>
+                        <label for="lecture-type" class="block text-gray-700 text-base font-bold mb-2">نوع المحاضرة:</label>
+                        <select id="lecture-type" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="link">رابط خارجي (يوتيوب، جوجل درايف، إلخ)</option>
+                            <option value="localVideo">فيديو من الجهاز (للمعاينة المحلية فقط)</option>
+                        </select>
+                    </div>
+                    <div id="lecture-link-container">
+                        <label for="lecture-link" class="block text-gray-700 text-base font-bold mb-2">رابط المحاضرة (فيديو/ملف):</label>
+                        <input type="url" id="lecture-link" placeholder="أدخل رابط يوتيوب أو رابط ملف PDF" required class="shadow-sm">
+                    </div>
+                    <div id="lecture-file-container" class="hidden">
+                        <label for="lecture-file" class="block text-gray-700 text-base font-bold mb-2">اختر ملف الفيديو من جهازك:</label>
+                        <input type="file" id="lecture-file" accept="video/*" class="shadow-sm p-2 bg-white rounded-md border border-gray-300 w-full">
+                        <p class="text-sm text-gray-500 mt-1">
+                            <strong class="text-red-500">ملاحظة:</strong> ملفات الفيديو من الجهاز لا تُخزّن بشكل دائم بسبب قيود المتصفح. ستحتاج لإعادة اختيار الملف للمشاهدة عند كل زيارة.
+                        </p>
+                    </div>
+                    <div>
+                        <label for="teacher-name" class="block text-gray-700 text-base font-bold mb-2">اسم المدرس:</label>
+                        <input type="text" id="teacher-name" placeholder="أدخل اسم المدرس" required class="shadow-sm">
+                    </div>
+                    <div>
+                        <label for="subject-name" class="block text-gray-700 text-base font-bold mb-2">اسم المادة الدراسية:</label>
+                        <input type="text" id="subject-name" placeholder="أدخل اسم المادة" required class="shadow-sm">
+                    </div>
+                    <div>
+                        <label for="teacher-image" class="block text-gray-700 text-base font-bold mb-2">صورة المدرس (اختياري):</label>
+                        <input type="file" id="teacher-image" accept="image/*" class="shadow-sm p-2 bg-white rounded-md border border-gray-300 w-full">
+                        <p class="text-sm text-gray-500 mt-1">لأفضل أداء، يرجى استخدام صور صغيرة الحجم.</p>
+                        <img id="teacher-image-preview" src="" alt="معاينة صورة المدرس" class="mt-2 rounded-full w-20 h-20 object-cover hidden">
+                    </div>
+                    <button type="submit" class="w-full text-lg shadow-md hover:shadow-lg">رفع المحاضرة</button>
+                    <button type="button" id="cancel-edit-btn" class="w-full btn-secondary text-lg shadow-md hover:shadow-lg hidden">إلغاء التعديل</button>
+                </form>
+            </div>
+
+            <!-- منطقة عرض المحتوى (المواد، المدرسين، الفصول، المحاضرات) -->
+            <div id="content-display-area" class="p-6 bg-white rounded-xl shadow-md">
+                <h2 id="current-view-title" class="text-3xl font-bold mb-6 text-indigo-700 text-center">المواد الدراسية المتوفرة</h2>
+                
+                <div id="navigation-buttons" class="flex gap-4 mb-6 hidden">
+                    <button id="back-button" class="btn-secondary py-2 px-4">العودة</button>
+                </div>
+
+                <div class="mb-6">
+                    <label for="search-input" class="block text-gray-700 text-base font-bold mb-2">البحث عن المحاضرات:</label>
+                    <input type="text" id="search-input" placeholder="ابحث بالعنوان أو المدرس أو المادة أو الفصل..." class="shadow-sm">
+                </div>
+                
+                <div id="main-content-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- سيتم تحميل المحتوى الديناميكي هنا (المواد، المدرسين، الفصول، أو المحاضرات) -->
+                    <p id="no-content-message" class="col-span-full text-center text-gray-500 text-xl hidden">لا توجد محتوى لعرضه حالياً.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة التأكيد المنبثقة -->
+    <div id="confirmation-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="confirmation-title">تأكيد العملية</h3>
+            <p id="confirmation-message" class="modal-message">هل أنت متأكد من المتابعة؟</p>
+            <div class="button-group">
+                <button id="confirm-action-btn" class="delete-btn">تأكيد</button>
+                <button id="cancel-action-btn" class="btn-secondary">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الإعدادات المنبثقة (للمسؤول والطالب لتغيير الاسم، وللمسؤول لإدارة المستخدمين ووضع الصيانة) -->
+    <div id="settings-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-indigo-800">إعدادات المنصة</h3>
+            <div class="space-y-6 text-right">
+                <!-- قسم تغيير الاسم -->
+                <div class="p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-700 mb-3">تعديل الاسم الخاص بك:</h4>
+                    <div>
+                        <label for="user-name-input" class="block text-gray-700 text-base font-bold mb-2">اسمك الكامل:</label>
+                        <input type="text" id="user-name-input" placeholder="أدخل اسمك الكامل" class="shadow-sm" required>
+                    </div>
+                    <button id="save-name-button" class="btn-update-name w-full mt-2">حفظ الاسم</button>
+                </div>
+
+                <div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="maintenance-mode-toggle" class="sr-only peer">
+                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[  ] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <span class="mr-3 text-lg font-medium text-gray-900">وضع الصيانة (يعطل وصول الطلاب)</span>
+                    </label>
+                </div>
+                <h4 class="text-xl font-bold text-indigo-700 mt-8 mb-4">إدارة حسابات المستخدمين:</h4>
+                <div id="user-list-container" class="max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                    <!-- سيتم تحميل قائمة المستخدمين هنا -->
+                </div>
+                <div class="button-group">
+                    <button id="close-settings-btn" class="btn-secondary">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تشغيل الفيديو المنبثقة -->
+    <div id="video-modal-overlay" class="modal-overlay">
+        <div class="modal-content !max-w-3xl !p-6">
+            <h3 id="video-modal-title" class="text-indigo-800 mb-4">مشاهدة الفيديو</h3>
+            <div class="flex flex-col items-center">
+                <video id="video-player" class="w-full h-auto rounded-lg shadow-lg mb-4" controls controlsList="nodownload" oncontextmenu="return false;"></video>
+                <button id="close-video-modal-btn" class="btn-secondary mt-4 w-1/2">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صندوق الرسائل المنبثقة -->
+    <div id="message-box" class="message-box"></div>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        جميع الحقوق محفوظة لدى منصة انجاز❤️
+    </footer>
+
+    <script>
+        // --- الثوابت ---
+        const ADMIN_EMAIL =  safa.majbal79@gmail.com ; // بريد المسؤول الرئيسي
+        const ADMIN_PASSWORD =  IRAQ1029384756 ; // كلمة مرور المسؤول الرئيسي
+        const COMPLETED_LECTURES_PREFIX =  completed_lectures_ ; // بادئة لمفاتيح إكمال المحاضرات للطلاب في localStorage
+        const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000; // شهر تقريباً بالملي ثانية (30 يوماً)
+
+        // --- عناصر DOM (نقاط الوصول إلى العناصر في HTML) ---
+        const loginView = document.getElementById( login-view );
+        const platformView = document.getElementById( platform-view );
+        const maintenanceView = document.getElementById( maintenance-view );
+        const loginRegisterForm = document.getElementById( login-register-form );
+        const authEmailInput = document.getElementById( auth-email-input );
+        const authPasswordInput = document.getElementById( auth-password-input );
+        const loginButton = document.getElementById( login-button );
+        const registerButton = document.getElementById( register-button );
+        const roleSelectionContainer = document.getElementById( role-selection-container );
+        const roleAdminRadio = document.getElementById( role-admin );
+        const roleStudentRadio = document.getElementById( role-student );
+        const logoutButton = document.getElementById( logout-button );
+        const authStatus = document.getElementById( auth-status );
+        const toggleRoleButton = document.getElementById( toggle-role-button );
+        const currentDisplayRoleSpan = document.getElementById( current-display-role );
+        const settingsButton = document.getElementById( settings-button );
+        const lectureFormSection = document.getElementById( lecture-form-section );
+        const addEditLectureForm = document.getElementById( add-edit-lecture-form );
+        const formTitle = document.getElementById( form-title );
+        const lectureIdInput = document.getElementById( lecture-id );
+        const lectureTitleInput = document.getElementById( lecture-title );
+        const chapterNameInput = document.getElementById( chapter-name ); // حقل اسم الفصل
+        const lectureTypeSelect = document.getElementById( lecture-type );
+        const lectureLinkContainer = document.getElementById( lecture-link-container );
+        const lectureLinkInput = document.getElementById( lecture-link );
+        const lectureFileContainer = document.getElementById( lecture-file-container );
+        const lectureFileInput = document.getElementById( lecture-file );
+        const teacherNameInput = document.getElementById( teacher-name );
+        const subjectNameInput = document.getElementById( subject-name );
+        const teacherImageInput = document.getElementById( teacher-image );
+        const teacherImagePreview = document.getElementById( teacher-image-preview );
+        const cancelEditBtn = document.getElementById( cancel-edit-btn );
+        const contentDisplayArea = document.getElementById( content-display-area ); // منطقة عرض المحتوى الرئيسية
+        const currentViewTitle = document.getElementById( current-view-title );
+        const navigationButtons = document.getElementById( navigation-buttons );
+        const backButton = document.getElementById( back-button );
+        const mainContentGrid = document.getElementById( main-content-grid );
+        const noContentMessage = document.getElementById( no-content-message );
+        const searchInput = document.getElementById( search-input );
+
+        // عناصر النوافذ المنبثقة (Modals)
+        const confirmationModalOverlay = document.getElementById( confirmation-modal-overlay );
+        const confirmationTitle = document.getElementById( confirmation-title );
+        const confirmationMessage = document.getElementById( confirmation-message );
+        const confirmActionBtn = document.getElementById( confirm-action-btn );
+        const cancelActionBtn = document.getElementById( cancel-action-btn );
+        const settingsModalOverlay = document.getElementById( settings-modal-overlay );
+        const maintenanceModeToggle = document.getElementById( maintenance-mode-toggle );
+        const userListContainer = document.getElementById( user-list-container );
+        const closeSettingsBtn = document.getElementById( close-settings-btn );
+        const userNameInput = document.getElementById( user-name-input ); // حقل إدخال اسم المستخدم في الإعدادات
+        const saveNameButton = document.getElementById( save-name-button ); // زر حفظ الاسم في الإعدادات
+        const videoModalOverlay = document.getElementById( video-modal-overlay );
+        const videoModalTitle = document.getElementById( video-modal-title );
+        const videoPlayer = document.getElementById( video-player );
+        const closeVideoModalBtn = document.getElementById( close-video-modal-btn );
+        const messageBox = document.getElementById( message-box );
+
+        // --- الحالة العامة (Global State) ---
+        let currentLoggedInUserEmail = localStorage.getItem( currentLoggedInUserEmail ); // البريد الإلكتروني للمستخدم الحالي
+        let currentLoggedInUserRole = localStorage.getItem( currentLoggedInUserRole ); // دور المستخدم الحالي ( admin  أو  student )
+        let currentLoggedInUserName = localStorage.getItem( currentLoggedInUserName ); // اسم المستخدم الحالي المعروض
+        let currentDisplayRole = localStorage.getItem( currentDisplayRole ) || currentLoggedInUserRole; // الدور الذي يتم عرضه حالياً (للمسؤول يمكن التبديل)
+        let allLectures = []; // مصفوفة عالمية تحتوي على جميع المحاضرات
+        let users = {}; // كائن يحتوي على جميع المستخدمين المسجلين {email: {passwordHash, role, status, lastActivatedDate, name}}
+        let studentCompletionStatus = {}; // {lectureId: true/false, ...} حالة إكمال المحاضرات للطالب الحالي
+        let confirmActionCallback = null; // دالة الاستدعاء لنافذة التأكيد
+
+        // حالة التنقل (للوصول الهرمي للمحاضرات)
+        let currentViewMode =  subjects ; //  subjects ,  teachers ,  chapters ,  lectures 
+        let selectedSubject = null;
+        let selectedTeacher = null;
+        let selectedChapter = null;
+
+        // --- الدوال المساعدة (Utility Functions) ---
+
+        /**
+         * تقوم بتشفير كلمة المرور باستخدام SHA-256.
+         * @param {string} password - كلمة المرور المطلوب تشفيرها.
+         * @returns {Promise<string>} - وعد (Promise) يعود بسلسلة نصية مشفرة بصيغة hexadecimal.
+         */
+        async function hashPassword(password) {
+            const textEncoder = new TextEncoder();
+            const data = textEncoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest( SHA-256 , data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashedPassword = hashArray.map(b => b.toString(16).padStart(2,  0 )).join(  );
+            return hashedPassword;
+        }
+
+        /**
+         * تعرض صندوق رسائل مخصص.
+         * @param {string} message - الرسالة المطلوب عرضها.
+         * @param {string} type - نوع الرسالة ( success ,  error ,  info ).
+         */
+        function showMessageBox(message, type =  info ) {
+            messageBox.textContent = message;
+            messageBox.className = `message-box active`; // تفعيل الأنماط التي تجعله يظهر
+            if (type ===  success ) {
+                messageBox.style.backgroundColor =  #22c55e ; // أخضر للنجاح
+            } else if (type ===  error ) {
+                messageBox.style.backgroundColor =  #ef4444 ; // أحمر للخطأ
+            } else {
+                messageBox.style.backgroundColor =  #4f46e5 ; // أزرق بنفسجي افتراضي
+            }
+
+            setTimeout(() => {
+                messageBox.classList.remove( active ); // إخفاء بعد 3 ثواني
+            }, 3000); 
+        }
+
+        /**
+         * تعرض نافذة التأكيد المنبثقة المخصصة.
+         * @param {string} title - عنوان نافذة التأكيد.
+         * @param {string} message - الرسالة المطلوب عرضها في النافذة.
+         * @param {function} callback - الدالة المطلوب تنفيذها عند التأكيد.
+         */
+        function showConfirmationModal(title, message, callback) {
+            confirmationTitle.textContent = title;
+            confirmationMessage.textContent = message;
+            confirmActionCallback = callback; // حفظ الدالة لتنفيذها لاحقاً
+            confirmationModalOverlay.classList.add( active ); // إظهار النافذة
+        }
+
+        /**
+         * تخفي نافذة التأكيد المنبثقة المخصصة.
+         */
+        function hideConfirmationModal() {
+            confirmationModalOverlay.classList.remove( active ); // إخفاء النافذة
+            confirmActionCallback = null; // مسح الدالة المحفوظة
+        }
+
+        /**
+         * تعرض نافذة تشغيل الفيديو المنبثقة.
+         * @param {string} title - عنوان الفيديو.
+         * @param {string} src - رابط مصدر الفيديو.
+         */
+        function showVideoModal(title, src) {
+            videoModalTitle.textContent = title;
+            videoPlayer.src = src;
+            videoPlayer.load(); // تحميل الفيديو
+            videoPlayer.play(); // محاولة تشغيل الفيديو تلقائياً
+
+            // إضافة خصائص لمنع التنزيل
+            videoPlayer.controlsList = "nodownload";
+            videoPlayer.oncontextmenu = function() { return false; };
+
+            videoModalOverlay.classList.add( active ); // إظهار النافذة
+        }
+
+        /**
+         * تخفي نافذة تشغيل الفيديو المنبثقة.
+         */
+        function hideVideoModal() {
+            videoPlayer.pause(); // إيقاف الفيديو
+            videoPlayer.src =   ; // مسح مصدر الفيديو
+            videoModalOverlay.classList.remove( active ); // إخفاء النافذة
+        }
+
+        // --- إدارة التخزين المحلي (LocalStorage) ---
+
+        /**
+         * تقوم بتهيئة حساب المسؤول إذا لم يكن موجوداً أو إذا كانت حالته غير نشطة أو اسمه غير مضبوط.
+         */
+        async function initializeAdminAccount() {
+            let existingUsers = getUsersFromStorage();
+            // التحقق مما إذا كان بريد المسؤول غير موجود أو حالته غير  active  أو اسمه غير مضبوط
+            if (!existingUsers[ADMIN_EMAIL] || existingUsers[ADMIN_EMAIL].status !==  active  || !existingUsers[ADMIN_EMAIL].name) { 
+                const hashedPassword = await hashPassword(ADMIN_PASSWORD);
+                existingUsers[ADMIN_EMAIL] = { 
+                    passwordHash: hashedPassword, 
+                    role:  admin , 
+                    status:  active , 
+                    lastActivatedDate: new Date().toISOString(), // تعيين تاريخ التفعيل الأولي
+                    name: existingUsers[ADMIN_EMAIL]?.name ||  المسؤول الرئيسي  // الحفاظ على الاسم الحالي إذا كان موجوداً، وإلا تعيين اسم افتراضي
+                };
+                saveUsersToStorage(existingUsers);
+                console.log( Admin account created/updated to active and named. );
+            }
+        }
+
+        /**
+         * تسترجع جميع حسابات المستخدمين من localStorage.
+         * @returns {Object} - كائن يربط البريد الإلكتروني ببيانات المستخدم (passwordHash, role, status, lastActivatedDate, name).
+         */
+        function getUsersFromStorage() {
+            try {
+                return JSON.parse(localStorage.getItem( enjaz_users ) ||  {} );
+            } catch (e) {
+                console.error("خطأ في تحليل بيانات المستخدمين من localStorage:", e);
+                return {};
+            }
+        }
+
+        /**
+         * تحفظ كائن حسابات المستخدمين الحالي في localStorage.
+         * @param {Object} usersData - كائن المستخدمين المطلوب حفظه.
+         */
+        function saveUsersToStorage(usersData) {
+            localStorage.setItem( enjaz_users , JSON.stringify(usersData));
+            users = usersData; // تحديث الكائن العام للمستخدمين
+        }
+
+        /**
+         * تسترجع جميع المحاضرات من localStorage.
+         * @returns {Array} - مصفوفة من كائنات المحاضرات.
+         */
+        function getLecturesFromStorage() {
+            try {
+                return JSON.parse(localStorage.getItem( enjaz_all_lectures ) ||  [] );
+            } catch (e) {
+                console.error("خطأ في تحليل بيانات المحاضرات من localStorage:", e);
+                return [];
+            }
+        }
+
+        /**
+         * تحفظ المصفوفة الحالية لجميع المحاضرات في localStorage.
+         */
+        function saveLecturesToStorage() {
+            localStorage.setItem( enjaz_all_lectures , JSON.stringify(allLectures));
+        }
+
+        /**
+         * تسترجع حالة وضع الصيانة من localStorage.
+         * @returns {boolean}
+         */
+        function getMaintenanceModeStatus() {
+            return localStorage.getItem( enjaz_maintenance_mode ) ===  true ;
+        }
+
+        /**
+         * تعين حالة وضع الصيانة في localStorage.
+         * @param {boolean} status
+         */
+        function setMaintenanceModeStatus(status) {
+            localStorage.setItem( enjaz_maintenance_mode , status);
+            renderView(); // إعادة عرض الواجهة لتعكس وضع الصيانة
+            if (status) {
+                showMessageBox( تم تفعيل وضع الصيانة. سيتم توجيه الطلاب إلى صفحة الصيانة. ,  info );
+            } else {
+                showMessageBox( تم تعطيل وضع الصيانة. يمكن للطلاب الوصول إلى المنصة الآن. ,  success );
+            }
+        }
+
+        /**
+         * تسترجع حالة إكمال المحاضرات للمستخدم الحالي الذي قام بتسجيل الدخول.
+         * @returns {Object} - كائن بمعرفات المحاضرات كمفاتيح وقيم true/false.
+         */
+        function getStudentCompletionStatus() {
+            if (!currentLoggedInUserEmail) return {};
+            try {
+                return JSON.parse(localStorage.getItem(COMPLETED_LECTURES_PREFIX + currentLoggedInUserEmail) ||  {} );
+            } catch (e) {
+                console.error("خطأ في تحليل حالة إكمال الطالب من localStorage:", e);
+                return {};
+            }
+        }
+
+        /**
+         * تحفظ حالة إكمال المحاضرات للمستخدم الحالي الذي قام بتسجيل الدخول.
+         * @param {Object} statusData - كائن حالة الإكمال المطلوب حفظه.
+         */
+        function saveStudentCompletionStatus(statusData) {
+            if (currentLoggedInUserEmail) {
+                localStorage.setItem(COMPLETED_LECTURES_PREFIX + currentLoggedInUserEmail, JSON.stringify(statusData));
+            }
+        }
+
+        // --- دوال المصادقة (Authentication Functions) ---
+
+        /**
+         * تتعامل مع عملية تسجيل دخول المستخدم.
+         * @param {string} email - البريد الإلكتروني للمستخدم.
+         * @param {string} password - كلمة مرور المستخدم.
+         */
+        async function loginUser(email, password) {
+            users = getUsersFromStorage(); // الحصول على أحدث بيانات المستخدمين
+            const user = users[email];
+
+            if (!user) {
+                showMessageBox( البريد الإلكتروني غير مسجل. ,  error );
+                return false;
+            }
+
+            const hashedPassword = await hashPassword(password);
+            if (user.passwordHash === hashedPassword) {
+                // التحقق من وضع الصيانة للطلاب
+                const isMaintenanceMode = getMaintenanceModeStatus();
+                if (isMaintenanceMode && user.role ===  student ) {
+                    showMessageBox( المنصة قيد الصيانة حالياً. يرجى المحاولة لاحقاً. ,  info );
+                    return false;
+                }
+
+                if (user.status ===  inactive ) {
+                    showMessageBox( حسابك غير مفعل. يرجى التواصل مع المسؤول لتفعيله. ,  error );
+                    return false;
+                }
+
+                // التحقق من العداد الشهري للطلاب
+                if (user.role ===  student  && user.lastActivatedDate) {
+                    const activationDate = new Date(user.lastActivatedDate);
+                    const now = new Date();
+                    if (now - activationDate >= MONTH_IN_MS) { // إذا مر شهر
+                        user.status =  inactive ; // تعطيل الحساب
+                        saveUsersToStorage(users);
+                        showMessageBox( انتهت صلاحية حسابك. يرجى التواصل مع المسؤول لتفعيله. ,  error );
+                        return false;
+                    }
+                }
+
+                currentLoggedInUserEmail = email;
+                currentLoggedInUserRole = user.role;
+                currentLoggedInUserName = user.name || email.split( @ )[0]; // تعيين الاسم، أو استخدام بادئة البريد كخيار احتياطي
+                
+                // بالنسبة للمسؤول، إجباري عرض الدور كـ  admin  عند تسجيل الدخول مباشرةً
+                if (currentLoggedInUserRole ===  admin ) {
+                    currentDisplayRole =  admin ; // فرض عرض المسؤول
+                } else {
+                    currentDisplayRole = currentLoggedInUserRole; // للطلاب، دور العرض هو دورهم الفعلي
+                }
+
+                // حفظ معلومات تسجيل الدخول في localStorage
+                localStorage.setItem( currentLoggedInUserEmail , currentLoggedInUserEmail);
+                localStorage.setItem( currentLoggedInUserRole , currentLoggedInUserRole);
+                localStorage.setItem( currentLoggedInUserName , currentLoggedInUserName); 
+                localStorage.setItem( currentDisplayRole , currentDisplayRole);
+                
+                studentCompletionStatus = getStudentCompletionStatus(); // تحميل حالة الإكمال لهذا المستخدم
+
+                showMessageBox(`مرحباً بك، ${currentLoggedInUserName}!`,  success );
+                renderView(); // عرض الواجهة الرئيسية
+                return true;
+            } else {
+                showMessageBox( كلمة المرور غير صحيحة. ,  error );
+                return false;
+            }
+        }
+
+        /**
+         * تتعامل مع عملية تسجيل مستخدم جديد.
+         * @param {string} email - البريد الإلكتروني للمستخدم الجديد.
+         * @param {string} password - كلمة مرور المستخدم الجديد.
+         * @param {string} selectedRole - الدور المختار ( admin  أو  student ).
+         */
+        async function registerUser(email, password, selectedRole) {
+            users = getUsersFromStorage(); // الحصول على أحدث بيانات المستخدمين
+            if (users[email]) {
+                showMessageBox( هذا البريد الإلكتروني مسجل بالفعل. ,  error );
+                return false;
+            }
+
+            // منطق خاص لتسجيل حساب المسؤول
+            if (email === ADMIN_EMAIL) {
+                if (password !== ADMIN_PASSWORD) {
+                    showMessageBox( كلمة المرور غير صحيحة لتسجيل بريد المسؤول كمسؤول. ,  error );
+                    return false;
+                }
+                if (selectedRole !==  admin ) {
+                    showMessageBox( لا يمكن تسجيل بريد المسؤول إلا كمسؤول. ,  error );
+                    return false;
+                }
+            } else if (selectedRole ===  admin ) {
+                // منع البريد الإلكتروني غير المسؤول من التسجيل كمسؤول
+                showMessageBox( ليس لديك صلاحية للتسجيل كمسؤول. ,  error );
+                return false;
+            }
+
+            const hashedPassword = await hashPassword(password);
+            const initialStatus = (email === ADMIN_EMAIL) ?  active  :  inactive ; // المسؤول نشط دائماً، والآخرون غير نشطين افتراضياً
+            const lastActivatedDate = (email === ADMIN_EMAIL) ? new Date().toISOString() : null; // تعيين تاريخ تفعيل أولي للمسؤول فقط
+            const defaultName = (email === ADMIN_EMAIL) ?  المسؤول الرئيسي  : email.split( @ )[0]; // تعيين اسم افتراضي
+
+            users[email] = { 
+                passwordHash: hashedPassword, 
+                role: selectedRole, 
+                status: initialStatus, 
+                lastActivatedDate: lastActivatedDate,
+                name: defaultName
+            };
+            saveUsersToStorage(users);
+
+            let message =  تم تسجيل حسابك بنجاح! يرجى تسجيل الدخول. ;
+            if (initialStatus ===  inactive ) {
+                message +=   حسابك غير مفعل بعد، يرجى انتظار تفعيل المسؤول. ;
+            }
+            showMessageBox(message,  success );
+            
+            authEmailInput.value =   ; // مسح النموذج بعد التسجيل
+            authPasswordInput.value =   ;
+            return true;
+        }
+
+        /**
+         * تتعامل مع عملية تسجيل خروج المستخدم.
+         */
+        function logoutUser() {
+            currentLoggedInUserEmail = null;
+            currentLoggedInUserRole = null;
+            currentLoggedInUserName = null; // مسح الاسم عند تسجيل الخروج
+            currentDisplayRole = null;
+            studentCompletionStatus = {}; // مسح حالة الإكمال عند تسجيل الخروج
+            // إزالة معلومات تسجيل الدخول من localStorage
+            localStorage.removeItem( currentLoggedInUserEmail );
+            localStorage.removeItem( currentLoggedInUserRole );
+            localStorage.removeItem( currentLoggedInUserName );
+            localStorage.removeItem( currentDisplayRole );
+            showMessageBox( تم تسجيل الخروج بنجاح. ,  info );
+            renderView(); // العودة إلى واجهة تسجيل الدخول
+            resetForm(); // مسح أي بيانات في نموذج المحاضرة
+        }
+
+        // --- دوال عرض واجهة المستخدم (UI Rendering Functions) ---
+
+        /**
+         * تعرض الواجهة الصحيحة (تسجيل الدخول، الصيانة، أو المنصة) بناءً على حالة المصادقة ووضع الصيانة.
+         */
+        function renderView() {
+            const isMaintenanceMode = getMaintenanceModeStatus();
+
+            // إخفاء جميع الواجهات أولاً
+            loginView.classList.add( hidden );
+            platformView.classList.add( hidden );
+            maintenanceView.classList.add( hidden );
+
+            if (currentLoggedInUserEmail && currentLoggedInUserRole) {
+                // المستخدم مسجل الدخول
+                if (isMaintenanceMode && currentLoggedInUserRole ===  student ) {
+                    // طالب مسجل الدخول خلال وضع الصيانة
+                    maintenanceView.classList.remove( hidden );
+                } else {
+                    // مسؤول مسجل الدخول خلال وضع الصيانة أو طالب مسجل الدخول بشكل طبيعي
+                    platformView.classList.remove( hidden );
+                    updatePlatformUI(); // تحديث واجهة المنصة
+                }
+            } else {
+                // لا يوجد مستخدم مسجل الدخول، عرض صفحة تسجيل الدخول أو الصيانة
+                if (isMaintenanceMode) {
+                    maintenanceView.classList.remove( hidden );
+                } else {
+                    loginView.classList.remove( hidden );
+                }
+            }
+        }
+
+        /**
+         * تحدث واجهة المنصة الرئيسية بناءً على حالة المستخدم والدور الحالي.
+         */
+        function updatePlatformUI() {
+            const displayName = currentLoggedInUserName || currentLoggedInUserEmail; // استخدام الاسم المعروض أو البريد الإلكتروني
+            authStatus.textContent = `مرحباً بك، ${displayName} (دورك: ${currentLoggedInUserRole ===  admin  ?  مسؤول  :  طالب })`;
+            
+            // إظهار/إخفاء الأزرار الخاصة بالمسؤول
+            if (currentLoggedInUserRole ===  admin ) {
+                toggleRoleButton.classList.remove( hidden );
+                settingsButton.classList.remove( hidden );
+                currentDisplayRoleSpan.textContent = currentDisplayRole ===  admin  ?  الطالب  :  المسؤول ;
+            } else {
+                toggleRoleButton.classList.add( hidden );
+                settingsButton.classList.add( hidden );
+            }
+
+            // إظهار/إخفاء نموذج المحاضرة بناءً على دور العرض الحالي
+            if (currentDisplayRole ===  admin ) {
+                lectureFormSection.classList.remove( hidden );
+            } else {
+                lectureFormSection.classList.add( hidden );
+            }
+
+            allLectures = getLecturesFromStorage(); // تحميل جميع المحاضرات
+            studentCompletionStatus = getStudentCompletionStatus(); // إعادة تحميل حالة إكمال الطالب
+            renderContent(); // عرض مستوى المحتوى الحالي
+            resetForm(); // إعادة تعيين النموذج
+            searchInput.value =   ; // مسح حقل البحث
+        }
+
+        /**
+         * تعرض المحتوى بناءً على وضع العرض الحالي والفلاتر المختارة.
+         */
+        function renderContent() {
+            mainContentGrid.innerHTML =   ; // مسح المحتوى الحالي
+            noContentMessage.classList.add( hidden ); // إخفاء رسالة "لا يوجد محتوى" افتراضياً
+            navigationButtons.classList.add( hidden ); // إخفاء زر العودة افتراضياً
+
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let itemsToDisplay = [];
+
+            if (currentViewMode ===  subjects ) {
+                currentViewTitle.textContent =  المواد الدراسية المتوفرة ;
+                const subjects = new Set();
+                allLectures.forEach(lec => {
+                    if (lec.subjectName && lec.subjectName.toLowerCase().includes(searchTerm)) {
+                        subjects.add(lec.subjectName);
+                    }
+                });
+                itemsToDisplay = Array.from(subjects).sort(); // فرز أبجدي
+
+                itemsToDisplay.forEach(subjectName => {
+                    const card = createCard(subjectName,  subject );
+                    mainContentGrid.appendChild(card);
+                });
+
+            } else if (currentViewMode ===  teachers ) {
+                navigationButtons.classList.remove( hidden ); // إظهار زر العودة
+                currentViewTitle.textContent = `المدرسون في مادة: ${selectedSubject}`;
+                const teachers = new Set();
+                allLectures.filter(lec => lec.subjectName === selectedSubject)
+                           .forEach(lec => {
+                               if (lec.teacherName && lec.teacherName.toLowerCase().includes(searchTerm)) {
+                                   teachers.add(lec.teacherName);
+                               }
+                           });
+                itemsToDisplay = Array.from(teachers).sort();
+
+                itemsToDisplay.forEach(teacherName => {
+                    const card = createCard(teacherName,  teacher );
+                    mainContentGrid.appendChild(card);
+                });
+
+            } else if (currentViewMode ===  chapters ) {
+                navigationButtons.classList.remove( hidden ); // إظهار زر العودة
+                currentViewTitle.textContent = `فصول المادة: ${selectedSubject} - المدرس: ${selectedTeacher}`;
+                const chapters = new Set();
+                allLectures.filter(lec => lec.subjectName === selectedSubject && lec.teacherName === selectedTeacher)
+                           .forEach(lec => {
+                               if (lec.chapterName && lec.chapterName.toLowerCase().includes(searchTerm)) {
+                                   chapters.add(lec.chapterName);
+                               }
+                           });
+                itemsToDisplay = Array.from(chapters).sort();
+
+                itemsToDisplay.forEach(chapterName => {
+                    const card = createCard(chapterName,  chapter );
+                    mainContentGrid.appendChild(card);
+                });
+
+            } else if (currentViewMode ===  lectures ) {
+                navigationButtons.classList.remove( hidden ); // إظهار زر العودة
+                currentViewTitle.textContent = `محاضرات الفصل: ${selectedChapter}`;
+                itemsToDisplay = allLectures.filter(lec => 
+                    lec.subjectName === selectedSubject && 
+                    lec.teacherName === selectedTeacher && 
+                    lec.chapterName === selectedChapter &&
+                    (lec.title.toLowerCase().includes(searchTerm) || (lec.fileName && lec.fileName.toLowerCase().includes(searchTerm)))
+                ).sort((a, b) => a.title.localeCompare(b.title)); // فرز المحاضرات حسب العنوان
+
+                if (itemsToDisplay.length > 0) {
+                    itemsToDisplay.forEach((lecture, index) => {
+                        const lectureCard = document.createElement( div );
+                        lectureCard.className =  lecture-card ;
+                        if (!lecture.id) {
+                            lecture.id = Date.now().toString() + Math.random().toString(36).substring(2, 9);
+                        }
+
+                        const teacherImageHtml = lecture.teacherImage ? `<img src="${lecture.teacherImage}" alt="صورة المدرس" class="rounded-full w-10 h-10 object-cover border-2 border-indigo-300">` :   ;
+                        
+                        // تحديد عنوان المحاضرة الذي سيتم عرضه بناءً على الدور
+                        const lectureTitleForDisplay = currentDisplayRole ===  student  ? `المحاضرة رقم ${index + 1}` : lecture.title;
+                        const lectureFullTitle = lecture.title; // الاحتفاظ بالعنوان الكامل لنافذة الفيديو
+
+                        const lectureContent = lecture.type ===  localVideo  ? `
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2 view-local-video-btn" 
+                                data-id="${lecture.id}" data-full-title="${lectureFullTitle}">
+                                مشاهدة الفيديو (من الجهاز)
+                            </button>
+                            <p class="text-sm text-gray-500 mt-1">تنسيق الفيديو: ${lecture.fileName ||  غير محدد }</p>
+                        ` : `
+                            <a href="${lecture.link}" target="_blank" rel="noopener noreferrer" class="self-start text-blue-700 hover:text-blue-900">
+                                عرض المحاضرة <span class="text-xs">&#x2190;</span> <!-- سهم لليسار -->
+                            </a>
+                        `;
+
+                        // كود مربع إشارة الاكتمال
+                        const isCompleted = studentCompletionStatus[lecture.id] ?  checked  :   ;
+                        const checkboxDisabled = currentDisplayRole !==  student  ?  disabled  :   ;
+
+                        const completionCheckboxHtml = `
+                            <label class="completion-checkbox-container">
+                                <input type="checkbox" class="lecture-completion-checkbox" data-lecture-id="${lecture.id}" ${isCompleted} ${checkboxDisabled}>
+                                <span>تمت المشاهدة</span>
+                            </label>
+                        `;
+
+                        lectureCard.innerHTML = `
+                            <h3 class="text-indigo-800">${lectureTitleForDisplay}</h3>
+                            <div class="teacher-info">
+                                ${teacherImageHtml}
+                                <span>المدرس: ${lecture.teacherName ||  غير معروف }</span>
+                                <span> | المادة: ${lecture.subjectName ||  غير معروفة }</span>
+                            </div>
+                            ${completionCheckboxHtml}
+                            ${lectureContent}
+                            ${currentDisplayRole ===  admin  ? `
+                            <div class="flex gap-2 mt-auto self-end">
+                                <button class="edit-btn" data-id="${lecture.id}">تعديل</button>
+                                <button class="delete-btn" data-id="${lecture.id}">حذف</button>
+                            </div>
+                            ` :   }
+                        `;
+                        mainContentGrid.appendChild(lectureCard);
+                    });
+                }
+            }
+            
+            // إظهار رسالة "لا يوجد محتوى" إذا كانت القائمة فارغة بعد التصفية
+            if (itemsToDisplay.length === 0) {
+                noContentMessage.classList.remove( hidden );
+                if (currentViewMode ===  lectures ) {
+                     noContentMessage.textContent =  لا توجد محاضرات في هذا الفصل. ;
+                } else if (currentViewMode ===  chapters ) {
+                     noContentMessage.textContent =  لا توجد فصول لهذا المدرس في هذه المادة. ;
+                } else if (currentViewMode ===  teachers ) {
+                     noContentMessage.textContent =  لا يوجد مدرسون لهذه المادة. ;
+                } else { // مواد دراسية
+                     noContentMessage.textContent =  لا توجد مواد دراسية متوفرة حالياً. ;
+                }
+            }
+
+
+            // إرفاق مستمعي الأحداث لجميع العناصر التي تم إنشاؤها ديناميكياً
+            if (currentViewMode ===  lectures ) {
+                if (currentDisplayRole ===  admin ) {
+                    document.querySelectorAll( .edit-btn ).forEach(button => {
+                        button.addEventListener( click , (event) => {
+                            editLecture(event.target.dataset.id);
+                        });
+                    });
+                    document.querySelectorAll( .delete-btn ).forEach(button => {
+                        button.addEventListener( click , (event) => {
+                            handleDeleteLecture(event.target.dataset.id);
+                        });
+                    });
+                }
+                document.querySelectorAll( .view-local-video-btn ).forEach(button => {
+                    button.addEventListener( click , (event) => {
+                        const lecture = allLectures.find(lec => lec.id === event.target.dataset.id);
+                        if (lecture && lecture.type ===  localVideo ) {
+                            const fullTitle = event.target.dataset.fullTitle; // الحصول على العنوان الكامل من خاصية البيانات
+                            showVideoModal(fullTitle, lecture.link); // تمرير العنوان الكامل إلى النافذة
+                            const tempInput = document.createElement( input );
+                            tempInput.type =  file ;
+                            tempInput.accept =  video/* ;
+                            tempInput.onchange = (e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const fileUrl = URL.createObjectURL(file);
+                                    videoPlayer.src = fileUrl;
+                                    videoPlayer.play();
+                                } else {
+                                    showMessageBox( لم يتم اختيار ملف فيديو للمشاهدة. ,  error );
+                                    hideVideoModal();
+                                }
+                            };
+                            tempInput.click();
+                        }
+                    });
+                });
+                if (currentDisplayRole ===  student ) {
+                    document.querySelectorAll( .lecture-completion-checkbox ).forEach(checkbox => {
+                        checkbox.addEventListener( change , (event) => {
+                            const lectureId = event.target.dataset.lectureId;
+                            studentCompletionStatus[lectureId] = event.target.checked;
+                            saveStudentCompletionStatus(studentCompletionStatus);
+                            showMessageBox(`تم ${event.target.checked ?  إضافة علامة الإكمال  :  إزالة علامة الإكمال } للمحاضرة.`,  info );
+                        });
+                    });
+                }
+            }
+        }
+
+        /**
+         * تنشئ بطاقة قابلة للنقر للمواد أو المدرسين أو الفصول.
+         * @param {string} name - الاسم الذي سيظهر على البطاقة.
+         * @param {string} type - نوع البطاقة ( subject  أو  teacher  أو  chapter ).
+         * @returns {HTMLElement} العنصر البطاقة الذي تم إنشاؤه.
+         */
+        function createCard(name, type) {
+            const card = document.createElement( div );
+            card.className =  content-card ;
+            card.innerHTML = `
+                <h3 class="text-indigo-800">${name}</h3>
+                <p class="text-gray-600">${type ===  subject  ?  مادة دراسية  : (type ===  teacher  ?  مدرس  :  فصل دراسي )}</p>
+            `;
+            card.addEventListener( click , () => {
+                if (type ===  subject ) {
+                    selectedSubject = name;
+                    selectedTeacher = null; // إعادة تعيين التحديدات المستويات الأدنى
+                    selectedChapter = null; // إعادة تعيين التحديدات المستويات الأدنى
+                    currentViewMode =  teachers ;
+                } else if (type ===  teacher ) {
+                    selectedTeacher = name;
+                    selectedChapter = null; // إعادة تعيين التحديدات المستويات الأدنى
+                    currentViewMode =  chapters ;
+                } else if (type ===  chapter ) {
+                    selectedChapter = name;
+                    currentViewMode =  lectures ;
+                }
+                // حفظ حالة التنقل في localStorage
+                localStorage.setItem( currentViewMode , currentViewMode);
+                localStorage.setItem( selectedSubject , selectedSubject);
+                localStorage.setItem( selectedTeacher , selectedTeacher);
+                localStorage.setItem( selectedChapter , selectedChapter);
+
+                renderContent(); // إعادة عرض المحتوى مع وضع العرض والتحديدات الجديدة
+            });
+            return card;
+        }
+
+        /**
+         * تعيد تعيين نموذج المحاضرة إلى حالته الأولية "إضافة".
+         */
+        function resetForm() {
+            addEditLectureForm.reset();
+            lectureIdInput.value =   ;
+            formTitle.textContent =  إضافة محاضرة جديدة ;
+            cancelEditBtn.classList.add( hidden );
+            lectureTypeSelect.value =  link ; // إعادة تعيين إلى القيمة الافتراضية
+            lectureLinkContainer.classList.remove( hidden );
+            lectureFileContainer.classList.add( hidden );
+            teacherImagePreview.classList.add( hidden );
+            teacherImagePreview.src =   ;
+            chapterNameInput.value =   ; 
+        }
+
+        /**
+         * تملأ نافذة الإعدادات المنبثقة بقائمة المستخدمين وحالة وضع الصيانة.
+         */
+        function populateSettingsModal() {
+            maintenanceModeToggle.checked = getMaintenanceModeStatus();
+            
+            // ملء اسم المستخدم الحالي
+            userNameInput.value = currentLoggedInUserName ||   ;
+
+            userListContainer.innerHTML =   ;
+            const allUsers = getUsersFromStorage();
+
+            for (const email in allUsers) {
+                if (allUsers.hasOwnProperty(email) && email !== ADMIN_EMAIL) { // لا تظهر المسؤول في قائمة المستخدمين
+                    const user = allUsers[email];
+                    const userDiv = document.createElement( div );
+                    userDiv.className =  flex justify-between items-center py-2 px-3 border-b border-gray-100 last:border-b-0 ;
+                    
+                    const lastActivatedText = user.lastActivatedDate ? 
+                        `تاريخ التفعيل الأخير: ${new Date(user.lastActivatedDate).toLocaleDateString( ar-EG , { year:  numeric , month:  long , day:  numeric  })}` : 
+                         لم يتم التفعيل بعد ;
+
+                    userDiv.innerHTML = `
+                        <div>
+                            <span class="text-gray-800">${user.name || user.email} (${user.role ===  admin  ?  مسؤول  :  طالب })</span>
+                            <p class="text-sm text-gray-500">${email}</p> <!-- عرض البريد الإلكتروني صراحةً لسياق المسؤول -->
+                            <p class="text-sm text-gray-500">${lastActivatedText}</p>
+                        </div>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" data-email="${email}" class="sr-only peer user-status-toggle" ${user.status ===  active  ?  checked  :   }>
+                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[  ] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="mr-3 text-sm font-medium text-gray-700">${user.status ===  active  ?  مفعل  :  غير مفعل }</span>
+                        </label>
+                    `;
+                    userListContainer.appendChild(userDiv);
+                }
+            }
+
+            document.querySelectorAll( .user-status-toggle ).forEach(toggle => {
+                toggle.addEventListener( change , (event) => {
+                    const emailToUpdate = event.target.dataset.email;
+                    const newStatus = event.target.checked ?  active  :  inactive ;
+                    
+                    users[emailToUpdate].status = newStatus;
+                    if (newStatus ===  active ) {
+                        users[emailToUpdate].lastActivatedDate = new Date().toISOString(); // تحديث تاريخ التفعيل
+                    } else {
+                        users[emailToUpdate].lastActivatedDate = null; // مسح تاريخ التفعيل إذا تم إلغاء التفعيل
+                    }
+                    saveUsersToStorage(users);
+                    showMessageBox(`تم تغيير حالة حساب ${emailToUpdate} إلى ${newStatus ===  active  ?  مفعل  :  غير مفعل }.`,  info );
+                    populateSettingsModal(); // تحديث القائمة لعرض الحالة والتاريخ المحدثين
+                });
+            });
+        }
+
+        // --- مستمعي الأحداث (Event Listeners) ---
+
+        // تقديم نموذج تسجيل الدخول/التسجيل
+        loginRegisterForm.addEventListener( submit , async (event) => {
+            event.preventDefault(); // منع الإرسال الافتراضي للنموذج
+            await loginUser(authEmailInput.value.trim(), authPasswordInput.value.trim());
+        });
+
+        // النقر على زر التسجيل الجديد
+        registerButton.addEventListener( click , async () => {
+            const email = authEmailInput.value.trim();
+            const password = authPasswordInput.value.trim();
+            const selectedRole = authEmailInput.value.trim() === ADMIN_EMAIL ? document.querySelector( input[name="user-role"]:checked )?.value :  student ;
+
+            if (!email || !password) {
+                showMessageBox( الرجاء تعبئة حقل البريد الإلكتروني وكلمة المرور. ,  error );
+                return;
+            }
+            
+            await registerUser(email, password, selectedRole);
+        });
+
+        // تبديل رؤية اختيار الدور بناءً على إدخال البريد الإلكتروني
+        authEmailInput.addEventListener( input , () => {
+            if (authEmailInput.value.trim() === ADMIN_EMAIL) {
+                roleSelectionContainer.classList.remove( hidden );
+                roleAdminRadio.checked = true; // تعيين المسؤول كافتراضي لبريد المسؤول
+            } else {
+                roleSelectionContainer.classList.add( hidden );
+                roleStudentRadio.checked = true; // تعيين الطالب كافتراضي لبريد غير المسؤول
+            }
+        });
+
+        // النقر على زر تسجيل الخروج
+        logoutButton.addEventListener( click , () => {
+            logoutUser();
+        });
+
+        // تبديل عرض المسؤول/الطالب للمسؤول
+        toggleRoleButton.addEventListener( click , () => {
+            if (currentLoggedInUserRole ===  admin ) { // يمكن للمسؤول فقط التبديل
+                currentDisplayRole = currentDisplayRole ===  admin  ?  student  :  admin ;
+                localStorage.setItem( currentDisplayRole , currentDisplayRole); // حفظ الحالة المتبدلة
+                currentDisplayRoleSpan.textContent = currentDisplayRole ===  admin  ?  الطالب  :  المسؤول ;
+                updatePlatformUI(); // إعادة عرض واجهة المستخدم بناءً على دور العرض الجديد
+                showMessageBox(`تم التبديل إلى عرض ${currentDisplayRole ===  admin  ?  المسؤول  :  الطالب }.`,  info );
+            }
+        });
+
+        // النقر على زر الإعدادات
+        settingsButton.addEventListener( click , () => {
+            if (currentLoggedInUserEmail) { // السماح لأي مستخدم مسجل بالوصول إلى الإعدادات لتغيير اسمه
+                populateSettingsModal();
+                settingsModalOverlay.classList.add( active );
+            } else {
+                showMessageBox( الرجاء تسجيل الدخول للوصول إلى الإعدادات. ,  error );
+            }
+        });
+
+        // إغلاق نافذة الإعدادات
+        closeSettingsBtn.addEventListener( click , () => {
+            settingsModalOverlay.classList.remove( active );
+        });
+
+        // حفظ الاسم في الإعدادات
+        saveNameButton.addEventListener( click , () => {
+            const newName = userNameInput.value.trim();
+            if (newName) {
+                users = getUsersFromStorage(); // الحصول على أحدث كائن المستخدمين
+                if (users[currentLoggedInUserEmail]) {
+                    users[currentLoggedInUserEmail].name = newName;
+                    saveUsersToStorage(users);
+                    currentLoggedInUserName = newName; // تحديث الحالة العامة
+                    localStorage.setItem( currentLoggedInUserName , newName); // تحديث localStorage
+                    updatePlatformUI(); // إعادة عرض الواجهة بالاسم الجديد
+                    showMessageBox( تم تحديث اسمك بنجاح! ,  success );
+                }
+            } else {
+                showMessageBox( الرجاء إدخال اسم صحيح. ,  error );
+            }
+        });
+
+        // تبديل وضع الصيانة في الإعدادات
+        maintenanceModeToggle.addEventListener( change , (event) => {
+            setMaintenanceModeStatus(event.target.checked);
+        });
+
+        // أزرار نافذة التأكيد
+        confirmActionBtn.addEventListener( click , () => {
+            if (confirmActionCallback) {
+                confirmActionCallback();
+            }
+            hideConfirmationModal();
+        });
+
+        cancelActionBtn.addEventListener( click , () => {
+            hideConfirmationModal();
+            showMessageBox( تم إلغاء العملية. ,  info );
+        });
+
+        // زر العودة للتنقل في المحتوى
+        backButton.addEventListener( click , () => {
+            if (currentViewMode ===  lectures ) {
+                currentViewMode =  chapters ;
+                selectedChapter = null; // مسح الفصل المحدد
+            } else if (currentViewMode ===  chapters ) {
+                currentViewMode =  teachers ;
+                selectedTeacher = null; // مسح المدرس المحدد
+            } else if (currentViewMode ===  teachers ) {
+                currentViewMode =  subjects ;
+                selectedSubject = null; // مسح المادة المحددة
+            }
+            // حفظ حالة التنقل في localStorage
+            localStorage.setItem( currentViewMode , currentViewMode);
+            localStorage.setItem( selectedSubject , selectedSubject);
+            localStorage.setItem( selectedTeacher , selectedTeacher);
+            localStorage.setItem( selectedChapter , selectedChapter);
+            renderContent(); // إعادة عرض المحتوى بناءً على وضع العرض المحدث
+        });
+
+        // اختيار نوع المحاضرة (رابط أو ملف محلي)
+        lectureTypeSelect.addEventListener( change , (event) => {
+            if (event.target.value ===  localVideo ) {
+                lectureLinkContainer.classList.add( hidden );
+                lectureLinkInput.removeAttribute( required ); // لا حاجة للرابط للملف المحلي
+                lectureFileContainer.classList.remove( hidden );
+                lectureFileInput.setAttribute( required ,  true );
+            } else {
+                lectureLinkContainer.classList.remove( hidden );
+                lectureLinkInput.setAttribute( required ,  true );
+                lectureFileContainer.classList.add( hidden );
+                lectureFileInput.removeAttribute( required );
+            }
+        });
+
+        // معاينة صورة المدرس
+        teacherImageInput.addEventListener( change , (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    teacherImagePreview.src = e.target.result;
+                    teacherImagePreview.classList.remove( hidden );
+                };
+                reader.readAsDataURL(file);
+            } else {
+                teacherImagePreview.src =   ;
+                teacherImagePreview.classList.add( hidden );
+            }
+        });
+
+        // تقديم نموذج إضافة/تعديل المحاضرة
+        addEditLectureForm.addEventListener( submit , async (event) => {
+            event.preventDefault();
+
+            if (currentDisplayRole !==  admin ) {
+                showMessageBox( ليس لديك صلاحية لإضافة أو تعديل المحاضرات. ,  error );
+                return;
+            }
+
+            const id = lectureIdInput.value;
+            const title = lectureTitleInput.value.trim();
+            const chapterName = chapterNameInput.value.trim(); // الحصول على اسم الفصل
+            const type = lectureTypeSelect.value;
+            let link = lectureLinkInput.value.trim();
+            const teacherName = teacherNameInput.value.trim();
+            const subjectName = subjectNameInput.value.trim();
+            const teacherImageFile = teacherImageInput.files[0];
+            let teacherImageData = teacherImagePreview.src; // استخدام المعاينة إذا تم تحميلها مسبقاً
+
+            if (!title || !chapterName || !teacherName || !subjectName || (type ===  link  && !link) || (type ===  localVideo  && !lectureFileInput.files[0])) {
+                showMessageBox( الرجاء تعبئة جميع الحقول المطلوبة. ,  error );
+                return;
+            }
+
+            // التعامل مع حالة الفيديو المحلي (تخزين رابط مؤقت للعرض، الملف الفعلي لا يُحفظ)
+            let fileName =   ;
+            if (type ===  localVideo  && lectureFileInput.files[0]) {
+                const file = lectureFileInput.files[0];
+                fileName = file.name;
+                link = `local_video_placeholder_${fileName}`; // رابط وهمي للإشارة إلى أنه فيديو محلي
+            }
+
+            // قراءة ملف صورة المدرس كـ Base64 إذا تم اختيار ملف جديد
+            if (teacherImageFile && teacherImageFile.size > 0) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    teacherImageData = e.target.result; // سلسلة Base64
+                    saveLectureData(id, title, "", chapterName, type, link, fileName, teacherName, subjectName, teacherImageData); 
+                };
+                reader.onerror = () => {
+                    showMessageBox( فشل في قراءة ملف الصورة. ,  error );
+                    teacherImageData =   ; // مسح بيانات الصورة عند الخطأ
+                    saveLectureData(id, title, "", chapterName, type, link, fileName, teacherName, subjectName, teacherImageData);
+                };
+                reader.readAsDataURL(teacherImageFile);
+            } else {
+                // إذا لم يتم اختيار صورة جديدة، احتفظ بالصورة الموجودة أو اجعلها فارغة
+                saveLectureData(id, title, "", chapterName, type, link, fileName, teacherName, subjectName, teacherImageData);
+            }
+        });
+
+        /**
+         * تحفظ بيانات المحاضرة الجديدة أو المحدثة.
+         * (ملاحظة: تم إزالة حقل الوصف، لذا يمرر كـ سلسلة فارغة)
+         */
+        function saveLectureData(id, title, description, chapterName, type, link, fileName, teacherName, subjectName, teacherImageData) {
+            // ملاحظة: الوصف هو الآن سلسلة فارغة بناءً على طلب إزالة الحقل.
+            if (id) {
+                // تعديل محاضرة موجودة
+                const index = allLectures.findIndex(lec => lec.id === id);
+                if (index !== -1) {
+                    allLectures[index] = { ...allLectures[index], title, description, chapterName, type, link, fileName, teacherName, subjectName, teacherImage: teacherImageData };
+                    showMessageBox( تم تحديث المحاضرة بنجاح! ,  success );
+                }
+            } else {
+                // إضافة محاضرة جديدة
+                const newLecture = {
+                    id: Date.now().toString() + Math.random().toString(36).substring(2, 9), // معرف فريد بسيط
+                    title,
+                    description, // ستكون سلسلة فارغة
+                    chapterName, // حفظ اسم الفصل
+                    type,
+                    link,
+                    fileName, // حفظ اسم الملف للفيديوهات المحلية
+                    teacherName,
+                    subjectName,
+                    teacherImage: teacherImageData, // سلسلة Base64 أو فارغة
+                    createdAt: new Date().toISOString()
+                };
+                allLectures.push(newLecture);
+                showMessageBox( تم رفع المحاضرة بنجاح! ,  success );
+            }
+
+            saveLecturesToStorage();
+            renderContent(); // إعادة عرض المحتوى بناءً على العرض الحالي
+            resetForm(); // مسح النموذج
+        }
+
+        // النقر على زر إلغاء التعديل
+        cancelEditBtn.addEventListener( click , () => {
+            resetForm();
+            showMessageBox( تم إلغاء وضع التعديل. ,  info );
+        });
+
+        // تعديل محاضرة
+        function editLecture(id) {
+            const lectureToEdit = allLectures.find(lecture => lecture.id === id);
+            if (lectureToEdit) {
+                lectureIdInput.value = lectureToEdit.id;
+                lectureTitleInput.value = lectureToEdit.title;
+                chapterNameInput.value = lectureToEdit.chapterName ||   ; // تحميل اسم الفصل
+                lectureTypeSelect.value = lectureToEdit.type;
+                teacherNameInput.value = lectureToEdit.teacherName;
+                subjectNameInput.value = lectureToEdit.subjectName;
+
+                if (lectureToEdit.type ===  localVideo ) {
+                    lectureLinkContainer.classList.add( hidden );
+                    lectureLinkInput.removeAttribute( required );
+                    lectureFileContainer.classList.remove( hidden );
+                    lectureFileInput.removeAttribute( required ); 
+                } else {
+                    lectureLinkContainer.classList.remove( hidden );
+                    lectureLinkInput.setAttribute( required ,  true );
+                    lectureFileContainer.classList.add( hidden );
+                    lectureLinkInput.value = lectureToEdit.link;
+                }
+
+                if (lectureToEdit.teacherImage) {
+                    teacherImagePreview.src = lectureToEdit.teacherImage;
+                    teacherImagePreview.classList.remove( hidden );
+                } else {
+                    teacherImagePreview.src =   ;
+                    teacherImagePreview.classList.add( hidden );
+                }
+
+                formTitle.textContent =  تعديل المحاضرة ;
+                cancelEditBtn.classList.remove( hidden );
+                window.scrollTo({ top: 0, behavior:  smooth  }); // التمرير للأعلى لرؤية النموذج
+            } else {
+                showMessageBox( المحاضرة غير موجودة! ,  error );
+            }
+        }
+
+        // حذف محاضرة (مع التأكيد)
+        function handleDeleteLecture(id) {
+            showConfirmationModal(
+                 تأكيد الحذف ,
+                 هل أنت متأكد أنك تريد حذف هذه المحاضرة؟ لا يمكن التراجع عن هذا الإجراء. ,
+                () => {
+                    deleteLecture(id);
+                }
+            );
+        }
+
+        function deleteLecture(id) {
+            const initialLength = allLectures.length;
+            allLectures = allLectures.filter(lecture => lecture.id !== id);
+            if (allLectures.length < initialLength) {
+                saveLecturesToStorage();
+                renderContent(); // إعادة عرض المحتوى بناءً على العرض الحالي
+                showMessageBox( تم حذف المحاضرة بنجاح. ,  success );
+            } else {
+                showMessageBox( فشل حذف المحاضرة أو أنها غير موجودة. ,  error );
+            }
+        }
+
+        // إدخال البحث
+        searchInput.addEventListener( input , () => {
+            renderContent(); // إعادة عرض وضع المحتوى الحالي مع فلتر البحث
+        });
+
+        // زر إغلاق نافذة الفيديو
+        closeVideoModalBtn.addEventListener( click , () => {
+            hideVideoModal();
+        });
+
+        // --- التحميل الأولي عند فتح الصفحة ---
+        window.onload = async () => {
+            await initializeAdminAccount(); // التأكد من وجود حساب المسؤول وكونه نشطاً
+
+            // استرجاع الحالة الحالية من localStorage
+            currentLoggedInUserEmail = localStorage.getItem( currentLoggedInUserEmail );
+            currentLoggedInUserRole = localStorage.getItem( currentLoggedInUserRole );
+            currentLoggedInUserName = localStorage.getItem( currentLoggedInUserName ); // تحميل الاسم
+            
+            // هام: إذا كان المسؤول مسجلاً الدخول، تأكد من أن دور العرض يبدأ كمسؤول
+            if (currentLoggedInUserEmail === ADMIN_EMAIL && currentLoggedInUserRole ===  admin ) {
+                currentDisplayRole =  admin ; // فرض عرض المسؤول عند التحميل
+                localStorage.setItem( currentDisplayRole ,  admin ); // حفظ هذا التفضيل
+            } else {
+                currentDisplayRole = localStorage.getItem( currentDisplayRole ) || currentLoggedInUserRole;
+            }
+            
+            // استرجاع حالة التنقل الحالية من localStorage لعرض نفس الواجهة عند العودة
+            currentViewMode = localStorage.getItem( currentViewMode ) ||  subjects ;
+            selectedSubject = localStorage.getItem( selectedSubject ) || null;
+            selectedTeacher = localStorage.getItem( selectedTeacher ) || null;
+            selectedChapter = localStorage.getItem( selectedChapter ) || null;
+
+            // معالجة الحالات التي قد تكون فيها حالة التنقل غير متناسقة أو عند تسجيل خروج المستخدم
+            if (!currentLoggedInUserEmail) { 
+                currentViewMode =  subjects ; // العودة إلى المواد إذا لم يكن مسجلاً الدخول
+                selectedSubject = null;
+                selectedTeacher = null;
+                selectedChapter = null;
+                // مسح أي أسماء عالقة إذا لم يكن مسجلاً الدخول
+                currentLoggedInUserName = null;
+                localStorage.removeItem( currentLoggedInUserName );
+            } else if (currentViewMode ===  teachers  && !selectedSubject) {
+                currentViewMode =  subjects ;
+            } else if (currentViewMode ===  chapters  && (!selectedSubject || !selectedTeacher)) {
+                currentViewMode =  teachers ;
+            } else if (currentViewMode ===  lectures  && (!selectedSubject || !selectedTeacher || !selectedChapter)) {
+                currentViewMode =  chapters ;
+            }
+            
+            renderView(); // عرض الواجهة بناءً على الحالة الحالية
+        };
+    </script>
+</body>
+</html>
