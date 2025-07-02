@@ -2723,6 +2723,14 @@
             localStorage.setItem( currentViewMode ,  subjects );
             renderContent();
         });
-    </script>
+<script type="module">
+    // هذا السطر مؤقت لإجبار تهيئة حساب المسؤول عند تحميل الصفحة.
+    // يرجى حذفه بعد التأكد من أن المنصة تعمل بشكل صحيح.
+    window.addEventListener( load , async () => {
+        console.log("[Temporary Script] Forcing initializeAdminAccount on load...");
+        await initializeAdminAccount();
+        console.log("[Temporary Script] initializeAdminAccount call completed.");
+    });
+</script>
 </body>
 </html>
